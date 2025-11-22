@@ -232,21 +232,26 @@ public class Pipe {
 	}
 
 	public boolean isFirstAttackRefPath() {
+		if (attacks.isEmpty()) {
+			return false;
+		}
 		return attacks.get(0).fileName.startsWith("REF");
 	}
 
 	public void writeLoadRelease(PrintWriter outfile, String pipeNr) {
-		if (!attacks.get(0).loadRelease)
+		if (!attacks.isEmpty() && !attacks.get(0).loadRelease)
 			outfile.println(pipeNr + "LoadRelease=N");
 	}
 
 	public void writePath(PrintWriter outfile, String pipeNr) {
-		String fullLine = pipeNr + "=" + attacks.get(0).fileName;
-		outfile.println(fixSeparator(fullLine));
+		if (!attacks.isEmpty()) {
+			String fullLine = pipeNr + "=" + attacks.get(0).fileName;
+			outfile.println(fixSeparator(fullLine));
+		}
 	}
 
 	public void writeIsTremulant(PrintWriter outfile, String pipeNr) {
-		if (attacks.get(0).isTremulant != -1)
+		if (!attacks.isEmpty() && attacks.get(0).isTremulant != -1)
 			outfile.println(pipeNr + "IsTremulant="
 					+ attacks.get(0).isTremulant);
 	}
@@ -298,9 +303,11 @@ public class Pipe {
 	}
 
 	public void writeRef(PrintWriter outfile, String pipeNr) {
-		outfile.println(pipeNr + "=" + attacks.get(0).fileName);
+		if (!attacks.isEmpty()) {
+			outfile.println(pipeNr + "=" + attacks.get(0).fileName);
+		}
 	}
-	
+
 	public String fixSeparator(String pathToCheck) {
 		if (pathToCheck.contains("/"))
 			pathToCheck = pathToCheck.replace("/", "\\");
